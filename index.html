@@ -288,13 +288,23 @@ html, body { height: 100%; background: var(--bg); color: var(--text); font-famil
       <div class="card-lbl">오늘 하루</div>
       <div class="fcard">
         <div class="frow" style="flex-direction:column;align-items:flex-start;gap:8px">
-          <span class="flbl">컨디션</span>
-          <div style="display:flex;gap:8px;width:100%">
-            <button class="cond-btn" id="cond-1" onclick="setCond(1)">😴 최악</button>
-            <button class="cond-btn" id="cond-2" onclick="setCond(2)">😞 나쁨</button>
-            <button class="cond-btn" id="cond-3" onclick="setCond(3)">😐 보통</button>
-            <button class="cond-btn" id="cond-4" onclick="setCond(4)">😊 좋음</button>
-            <button class="cond-btn" id="cond-5" onclick="setCond(5)">🔥 최고</button>
+          <span class="flbl">신체 컨디션</span>
+          <div style="display:flex;gap:6px;width:100%">
+            <button class="cond-btn" id="body-1" onclick="setCond('body',1)">😴 최악</button>
+            <button class="cond-btn" id="body-2" onclick="setCond('body',2)">😞 나쁨</button>
+            <button class="cond-btn" id="body-3" onclick="setCond('body',3)">😐 보통</button>
+            <button class="cond-btn" id="body-4" onclick="setCond('body',4)">😊 좋음</button>
+            <button class="cond-btn" id="body-5" onclick="setCond('body',5)">🔥 최고</button>
+          </div>
+        </div>
+        <div class="frow" style="flex-direction:column;align-items:flex-start;gap:8px">
+          <span class="flbl">멘탈 컨디션</span>
+          <div style="display:flex;gap:6px;width:100%">
+            <button class="cond-btn" id="mental-1" onclick="setCond('mental',1)">😴 최악</button>
+            <button class="cond-btn" id="mental-2" onclick="setCond('mental',2)">😞 나쁨</button>
+            <button class="cond-btn" id="mental-3" onclick="setCond('mental',3)">😐 보통</button>
+            <button class="cond-btn" id="mental-4" onclick="setCond('mental',4)">😊 좋음</button>
+            <button class="cond-btn" id="mental-5" onclick="setCond('mental',5)">🔥 최고</button>
           </div>
         </div>
         <div class="frow" style="flex-direction:column;align-items:flex-start;gap:6px">
@@ -422,11 +432,13 @@ function calcPct(rec) {
   return Math.round(done / CHECK_ITEMS.length * 100);
 }
 
-let curCond = 0;
-function setCond(n) {
-  curCond = n;
+let curBodyCond = 0;
+let curMentalCond = 0;
+function setCond(type, n) {
+  if (type === 'body') curBodyCond = n;
+  else curMentalCond = n;
   for (let i = 1; i <= 5; i++) {
-    const btn = document.getElementById('cond-' + i);
+    const btn = document.getElementById(type + '-' + i);
     if (btn) btn.classList.toggle('on', i === n);
   }
   scheduleAutoSave();
@@ -528,10 +540,13 @@ function loadInputForDay() {
     waterCount ? `${waterCount}잔 / 8잔 (약 ${(waterCount*0.2).toFixed(1)}L)` : '0잔 / 8잔';
 
   // 컨디션
-  curCond = rec.condition || 0;
+  curBodyCond = rec.bodyCondition || 0;
+  curMentalCond = rec.mentalCondition || 0;
   for (let i = 1; i <= 5; i++) {
-    const btn = document.getElementById('cond-' + i);
-    if (btn) btn.classList.toggle('on', i === curCond);
+    const bb = document.getElementById('body-' + i);
+    const mb = document.getElementById('mental-' + i);
+    if (bb) bb.classList.toggle('on', i === curBodyCond);
+    if (mb) mb.classList.toggle('on', i === curMentalCond);
   }
 
   // 한줄 정리
@@ -623,9 +638,10 @@ function saveRecord() {
   rec.lunch     = document.getElementById('inp-lu').value;
   rec.dinner    = document.getElementById('inp-di').value;
   rec.snack     = document.getElementById('inp-sn').value;
-  rec.water     = waterCount;
-  rec.condition = curCond;
-  rec.summary   = document.getElementById('inp-summary').value;
+  rec.water          = waterCount;
+  rec.bodyCondition  = curBodyCond;
+  rec.mentalCondition= curMentalCond;
+  rec.summary        = document.getElementById('inp-summary').value;
 
   const exMap = {};
   ['stretch','strength','cardio'].forEach(k => {
@@ -723,10 +739,11 @@ function renderDaily() {
       <div class="card-lbl">수분</div>
       <div class="detail-row"><span class="detail-lbl">섭취량</span><span class="detail-val">${rec.water}잔 (약 ${(rec.water*0.2).toFixed(1)}L)</span></div>
     </div>` : ''}
-    ${(rec.condition || rec.summary) ? `
+    ${(rec.bodyCondition || rec.mentalCondition || rec.summary) ? `
     <div class="card">
       <div class="card-lbl">오늘 하루</div>
-      ${rec.condition ? `<div class="detail-row"><span class="detail-lbl">컨디션</span><span class="detail-val">${['','😴 최악','😞 나쁨','😐 보통','😊 좋음','🔥 최고'][rec.condition]}</span></div>` : ''}
+      ${rec.bodyCondition ? `<div class="detail-row"><span class="detail-lbl">신체</span><span class="detail-val">${['','😴 최악','😞 나쁨','😐 보통','😊 좋음','🔥 최고'][rec.bodyCondition]}</span></div>` : ''}
+      ${rec.mentalCondition ? `<div class="detail-row"><span class="detail-lbl">멘탈</span><span class="detail-val">${['','😴 최악','😞 나쁨','😐 보통','😊 좋음','🔥 최고'][rec.mentalCondition]}</span></div>` : ''}
       ${rec.summary ? `<div class="detail-row"><span class="detail-lbl">한줄정리</span><span class="detail-val">${rec.summary}</span></div>` : ''}
     </div>` : ''}
     <button onclick="exportDay('${key}')" style="width:100%;padding:11px;border-radius:var(--r);border:1px solid rgba(232,197,71,0.3);background:rgba(232,197,71,0.06);color:#E8C547;font-family:'Noto Sans KR',sans-serif;font-size:13px;cursor:pointer;margin-top:2px">📋 이날 기록 텍스트로 복사</button>
@@ -785,10 +802,11 @@ function exportDay(key) {
   }
 
   const COND_LBL = ['','😴 최악','😞 나쁨','😐 보통','😊 좋음','🔥 최고'];
-  if (rec.condition || rec.summary) {
+  if (rec.bodyCondition || rec.mentalCondition || rec.summary) {
     text += `\n[ 오늘 하루 ]\n`;
-    if (rec.condition) text += `컨디션: ${COND_LBL[rec.condition]}\n`;
-    if (rec.summary)   text += `한줄정리: ${rec.summary}\n`;
+    if (rec.bodyCondition)   text += `신체 컨디션: ${COND_LBL[rec.bodyCondition]}\n`;
+    if (rec.mentalCondition) text += `멘탈 컨디션: ${COND_LBL[rec.mentalCondition]}\n`;
+    if (rec.summary)         text += `한줄정리: ${rec.summary}\n`;
   }
 
   if (navigator.share) {
@@ -932,7 +950,8 @@ function renderDayDetail(key) {
         </div>`;
       }).join('')}
       ${rec.weight ? `<div class="detail-row"><span class="detail-lbl">체중</span><span class="detail-val">${rec.weight}kg</span></div>` : ''}
-      ${rec.condition ? `<div class="detail-row"><span class="detail-lbl">컨디션</span><span class="detail-val">${['','😴 최악','😞 나쁨','😐 보통','😊 좋음','🔥 최고'][rec.condition]}</span></div>` : ''}
+      ${rec.bodyCondition ? `<div class="detail-row"><span class="detail-lbl">신체</span><span class="detail-val">${['','😴 최악','😞 나쁨','😐 보통','😊 좋음','🔥 최고'][rec.bodyCondition]}</span></div>` : ''}
+      ${rec.mentalCondition ? `<div class="detail-row"><span class="detail-lbl">멘탈</span><span class="detail-val">${['','😴 최악','😞 나쁨','😐 보통','😊 좋음','🔥 최고'][rec.mentalCondition]}</span></div>` : ''}
       ${rec.summary ? `<div class="detail-row"><span class="detail-lbl">한줄정리</span><span class="detail-val">${rec.summary}</span></div>` : ''}
     </div>
     <button onclick="exportDay('${key}')" style="width:100%;padding:10px;border-radius:var(--r);border:1px solid rgba(232,197,71,0.3);background:rgba(232,197,71,0.06);color:#E8C547;font-family:'Noto Sans KR',sans-serif;font-size:12px;cursor:pointer;margin-top:2px">📋 텍스트로 복사</button>

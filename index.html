@@ -11,22 +11,22 @@
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&family=Black+Han+Sans&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
 :root {
-  --bg: #0D0D0D;
-  --surface: #1A1A1A;
-  --surface2: #242424;
-  --card: #1E1E1E;
-  --border: rgba(255,255,255,0.08);
-  --border2: rgba(255,255,255,0.04);
-  --text: #F0EDE8;
-  --text2: #8A8580;
-  --text3: #4A4540;
-  --accent: #E8C547;
-  --accent2: #F0D878;
-  --accent-dim: rgba(232,197,71,0.1);
-  --green: #4CAF7D;
-  --green-dim: rgba(76,175,125,0.1);
-  --red: #E05555;
-  --red-dim: rgba(224,85,85,0.1);
+  --bg: #F8F7F3;
+  --surface: #F0EDE6;
+  --surface2: #E8E4DC;
+  --card: #FFFFFF;
+  --border: rgba(28,26,20,0.08);
+  --border2: rgba(28,26,20,0.04);
+  --text: #1C1A14;
+  --text2: #6B6560;
+  --text3: #B0A99F;
+  --accent: #C4991A;
+  --accent2: #D4AA2A;
+  --accent-dim: rgba(196,153,26,0.1);
+  --green: #2A7D5F;
+  --green-dim: rgba(42,125,95,0.1);
+  --red: #C0392B;
+  --red-dim: rgba(192,57,43,0.1);
   --r: 12px; --rs: 8px;
 }
 * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
@@ -51,7 +51,7 @@ html, body { height: 100%; background: var(--bg); color: var(--text); font-famil
 .panel.on { display: block; }
 
 /* 하단 탭 */
-.bnav { display: flex; position: fixed; bottom: 0; left: 0; right: 0; background: var(--surface); border-top: 1px solid var(--border); padding-bottom: env(safe-area-inset-bottom); z-index: 100; }
+.bnav { display: flex; position: fixed; bottom: 0; left: 0; right: 0; background: var(--card); border-top: 1px solid var(--border); padding-bottom: env(safe-area-inset-bottom); z-index: 100; }
 .nbtn { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 9px 4px 7px; background: none; border: none; cursor: pointer; color: var(--text3); font-size: 10px; gap: 3px; font-family: 'Noto Sans KR', sans-serif; }
 .nbtn .ico { font-size: 18px; }
 .nbtn.on { color: var(--accent); }
@@ -62,7 +62,7 @@ html, body { height: 100%; background: var(--bg); color: var(--text); font-famil
 .dnav-lbl { font-family: 'DM Mono', monospace; font-size: 13px; color: var(--text); font-weight: 500; }
 
 /* D-day 카드 */
-.dday-card { background: linear-gradient(135deg, var(--accent-dim), transparent); border: 1px solid rgba(232,197,71,0.2); border-radius: var(--r); padding: 14px 16px; margin-bottom: 12px; display: flex; align-items: center; justify-content: space-between; }
+.dday-card { background: linear-gradient(135deg, var(--accent-dim), var(--surface)); border: 1px solid rgba(196,153,26,0.2); border-radius: var(--r); padding: 14px 16px; margin-bottom: 12px; display: flex; align-items: center; justify-content: space-between; }
 .dday-left { }
 .dday-num { font-family: 'Black Han Sans', sans-serif; font-size: 36px; color: var(--accent); line-height: 1; }
 .dday-sub { font-size: 11px; color: var(--text3); margin-top: 3px; }
